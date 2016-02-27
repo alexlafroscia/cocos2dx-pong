@@ -5,6 +5,8 @@ var res = {
   HelloWorld_png : "res/HelloWorld.png",
   game_menu_png: "res/game-menu.png",
   puck_png: "res/puck.png",
+  paddle_left_png: "res/paddle-red.png",
+  paddle_right_png: "res/paddle-blue.png"
 };
 
 var sprites = {

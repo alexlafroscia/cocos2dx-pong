@@ -8,9 +8,17 @@ var Puck = cc.Sprite.extend({
 
   gameLayer: null,
 
+  ctor: function() {
+    this._super(res.puck_png);
+  },
+
+  detectCollisionWithPaddle: function(paddle) {
+    var puckRect = this.getCurrentRectangle();
+    var paddleRect = paddle.getCurrentRectangle();
+    return cc.rectIntersectsRect(puckRect, paddleRect);
+  },
+
   /**
-   * isColliding
-   *
    * Whether or not the puck is currently colliding with something else
    */
   isCollidingTop: function() {
@@ -28,13 +36,19 @@ var Puck = cc.Sprite.extend({
   isCollidingLeft: function() {
     var p = this.getPosition();
     var gl = this.gameLayer;
-    return p.x < 0;
+    return (
+      p.x < 0 ||
+      this.detectCollisionWithPaddle(this.gameLayer.paddles.left)
+    );
   },
 
   isCollidingRight: function() {
     var p = this.getPosition();
     var gl = this.gameLayer;
-    return p.x > gl.screenRect.width;
+    return (
+      p.x > gl.screenRect.width ||
+      this.detectCollisionWithPaddle(this.gameLayer.paddles.right)
+    );
   },
 
   bounceHorizontal: function() {
@@ -64,11 +78,20 @@ var Puck = cc.Sprite.extend({
     if (this.onDestroyCallback) {
       this.gameLayer.destroyPuck();
     }
+  },
+
+  getCurrentRectangle: function() {
+    return cc.rect(
+      this.getPosition().x - (this.getContentSize().width / 2),
+      this.getPosition().y - (this.getContentSize().height / 2),
+      this.getContentSize().width,
+      this.getContentSize().height
+    );
   }
 });
 
 Puck.create = function() {
-  var puck = new Puck(res.puck_png);
+  var puck = new Puck();
   puck.setVisible(true);
   return puck;
 };

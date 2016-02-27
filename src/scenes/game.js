@@ -6,6 +6,10 @@ var GameLayer = cc.Layer.extend({
   screenRect: null,
 
   puck: null,
+  paddles: {
+    left: null,
+    right: null,
+  },
 
   init: function() {
     this._super();
@@ -17,6 +21,16 @@ var GameLayer = cc.Layer.extend({
   ctor: function() {
     this._super();
     this.createPuck();
+
+    var leftPaddle = Paddle.create(null, 'left');
+    leftPaddle.gamelayer = this;
+    this.addChild(leftPaddle);
+    this.paddles.left = leftPaddle;
+
+    var rightPaddle = Paddle.create(null, 'right');
+    rightPaddle.gameLayer = this;
+    this.addChild(rightPaddle);
+    this.paddles.right = rightPaddle;
 
     this.scheduleUpdate();
     return true;
