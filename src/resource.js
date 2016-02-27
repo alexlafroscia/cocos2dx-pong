@@ -3,7 +3,8 @@ var SPRITE_WIDTH = 250;
 
 var res = {
   HelloWorld_png : "res/HelloWorld.png",
-  game_menu_png: "res/game-menu.png"
+  game_menu_png: "res/game-menu.png",
+  puck_png: "res/puck.png",
 };
 
 var sprites = {
@@ -35,7 +36,11 @@ var sprites = {
       cc.rect(SPRITE_WIDTH * 2, SPRITE_HEIGHT, SPRITE_WIDTH, SPRITE_HEIGHT)
     )
   }
-}
+};
+
+var spriteFrames = {
+  puck: cc.SpriteFrame.create(res.puck_png)
+};
 
 var g_resources = [];
 for (var i in res) {
