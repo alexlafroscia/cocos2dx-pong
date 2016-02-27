@@ -16,6 +16,7 @@
         "src/components/puck.js",
         "src/components/paddle.js",
         "src/components/controller.js",
+        "src/components/player.js",
         "src/scenes/home.js",
         "src/scenes/game.js"
     ]

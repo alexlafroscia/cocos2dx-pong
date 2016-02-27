@@ -1,12 +1,17 @@
+var SCORE_TEXT_SIZE = 40;
+var SCORE_TEXT_CENTER_OFFSET = 30;
+
 var GameLayer = cc.Layer.extend({
   sprite: null,
-
-  playing: true,
 
   screenRect: null,
 
   puck: null,
   paddles: {
+    left: null,
+    right: null,
+  },
+  players: {
     left: null,
     right: null,
   },
@@ -16,6 +21,16 @@ var GameLayer = cc.Layer.extend({
 
     var winSize = cc.director.getWinSize();
     this.screenRect = cc.rect(0, 0, winSize.width, winSize.height + 10);
+
+    var leftScoreLabel = new cc.LabelTTF('0', 'Arial', SCORE_TEXT_SIZE);
+    leftScoreLabel.x = winSize.width / 2 - SCORE_TEXT_CENTER_OFFSET;
+    leftScoreLabel.y = winSize.height - (SCORE_TEXT_SIZE * 1.5);
+    this.addChild(leftScoreLabel);
+
+    var rightScoreLabel = new cc.LabelTTF('0', 'Arial', SCORE_TEXT_SIZE);
+    rightScoreLabel.x = winSize.width / 2 + SCORE_TEXT_CENTER_OFFSET;
+    rightScoreLabel.y = winSize.height - (SCORE_TEXT_SIZE * 1.5)
+    this.addChild(rightScoreLabel);
 
     var leftController = Controller.create('left');
     leftController.gameLayer = this;
@@ -35,6 +50,15 @@ var GameLayer = cc.Layer.extend({
     this.addChild(rightPaddle);
     this.paddles.right = rightPaddle;
 
+    this.players.left = new Player(leftController);
+    this.players.left.onScoreUpdate = function(newScore) {
+      leftScoreLabel.string = newScore + '';
+    };
+    this.players.right = new Player(rightController);
+    this.players.right.onScoreUpdate = function(newScore) {
+      rightScoreLabel.string = newScore + '';
+    };
+
     this.createPuck();
 
     this.scheduleUpdate();
@@ -42,12 +66,19 @@ var GameLayer = cc.Layer.extend({
   },
 
   createPuck: function() {
-    if (this.puck) {
-      throw Error('There can only be one puck visible at a time');
-    }
     var size = cc.director.getWinSize();
     var puck = Puck.create();
     puck.gameLayer = this;
+
+    puck.onCrossLeftBoundary = function() {
+      this.players.left.scorePoint();
+      this.resetPuck();
+    }.bind(this);
+    puck.onCrossRightBoundary = function() {
+      this.players.right.scorePoint();
+      this.resetPuck();
+    }.bind(this);
+
     this.addChild(puck);
     puck.setPosition(size.width / 2, size.height / 2);
     this.puck = puck;
@@ -55,16 +86,15 @@ var GameLayer = cc.Layer.extend({
 
   update: function(dt) {
     this._super(dt);
-    if (this.playing) {
+    if (this.puck) {
       this.puck.scheduleUpdate();
-      this.paddles.right.scheduleUpdate();
-      this.paddles.left.scheduleUpdate();
     }
+    this.paddles.right.scheduleUpdate();
+    this.paddles.left.scheduleUpdate();
   },
 
-  destroyPuck: function(puck) {
-    // Do something to clean up the puck
-    this.puck = null;
+  resetPuck: function() {
+    this.puck.destroy();
     this.createPuck();
   }
 

@@ -1,15 +1,28 @@
+function getRandomVelocity() {
+  var r = Math.random();
+  if (r > 0.5) {
+    return 400;
+  } else {
+    return -400;
+  }
+}
 var Puck = cc.Sprite.extend({
   active: true,
 
-  xVelocity: 400,
-  yVelocity: 400,
+  xVelocity: 0,
+  yVelocity: 0,
 
   onDestroyCallback: null,
+
+  onCrossLeftBoundary: undefined,
+  onCrossRightBoundary: undefined,
 
   gameLayer: null,
 
   ctor: function() {
     this._super(res.puck_png);
+    this.xVelocity = getRandomVelocity();
+    this.yVelocity = getRandomVelocity();
   },
 
   detectCollisionWithPaddle: function(paddle) {
@@ -34,21 +47,22 @@ var Puck = cc.Sprite.extend({
   },
 
   isCollidingLeft: function() {
+    return this.detectCollisionWithPaddle(this.gameLayer.paddles.left);
+  },
+
+  isOutOfBoundsLeft: function() {
     var p = this.getPosition();
-    var gl = this.gameLayer;
-    return (
-      p.x < 0 ||
-      this.detectCollisionWithPaddle(this.gameLayer.paddles.left)
-    );
+    return p.x < 0;
   },
 
   isCollidingRight: function() {
+    return this.detectCollisionWithPaddle(this.gameLayer.paddles.right);
+  },
+
+  isOutOfBoundsRight: function() {
     var p = this.getPosition();
     var gl = this.gameLayer;
-    return (
-      p.x > gl.screenRect.width ||
-      this.detectCollisionWithPaddle(this.gameLayer.paddles.right)
-    );
+    return p.x > gl.screenRect.width;
   },
 
   bounceHorizontal: function() {
@@ -66,8 +80,11 @@ var Puck = cc.Sprite.extend({
     // Detect collisions and bounce
     if (this.isCollidingTop() || this.isCollidingBottom()) {
       this.bounceVertical();
-    }
-    if (this.isCollidingRight() || this.isCollidingLeft()) {
+    } else if (this.isOutOfBoundsLeft()) {
+      this.onCrossLeftBoundary();
+    } else if (this.isOutOfBoundsRight()) {
+      this.onCrossRightBoundary();
+    } else if (this.isCollidingRight() || this.isCollidingLeft()) {
       this.bounceHorizontal();
     }
 
@@ -76,8 +93,10 @@ var Puck = cc.Sprite.extend({
 
   destroy: function() {
     if (this.onDestroyCallback) {
-      this.gameLayer.destroyPuck();
+      this.onDestroyCallback.call(this);
     }
+    this.gameLayer.removeChild(this);
+    // this.release();
   },
 
   getCurrentRectangle: function() {
