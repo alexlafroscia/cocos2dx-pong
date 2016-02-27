@@ -36,7 +36,7 @@ var GameLayer = cc.Layer.extend({
 
   update: function() {
     if (this.playing) {
-      this.puck.update(1);
+      this.puck.update(1.2);
     }
   },
 
