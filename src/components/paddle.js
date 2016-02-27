@@ -1,3 +1,5 @@
+var ACTIVE_SPEED = 700;
+
 var Paddle = cc.Sprite.extend({
   active: true,
 
@@ -43,11 +45,11 @@ var Paddle = cc.Sprite.extend({
   },
 
   moveUp: function() {
-    this.yVelocity = -10;
+    this.yVelocity = ACTIVE_SPEED;
   },
 
   moveDown: function() {
-    this.yVelocity = 10;
+    this.yVelocity = -ACTIVE_SPEED;
   },
 
   acceptPlayerMovement: function(dt) {
@@ -59,7 +61,7 @@ var Paddle = cc.Sprite.extend({
   },
 
   update: function(dt) {
-    this._super();
+    this._super(dt);
     var p = this.getPosition();
 
     // Detect collisions and bounce

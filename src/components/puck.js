@@ -1,8 +1,8 @@
 var Puck = cc.Sprite.extend({
   active: true,
 
-  xVelocity: 10,
-  yVelocity: 10,
+  xVelocity: 400,
+  yVelocity: 400,
 
   onDestroyCallback: null,
 
@@ -60,7 +60,7 @@ var Puck = cc.Sprite.extend({
   },
 
   update: function(dt) {
-    this._super();
+    this._super(dt);
     var p = this.getPosition();
 
     // Detect collisions and bounce

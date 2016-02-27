@@ -11,15 +11,11 @@ var GameLayer = cc.Layer.extend({
     right: null,
   },
 
-  init: function() {
-    this._super();
-    var winSize = cc.director.getWinSize();
-    this.screenRect = cc.rect(0, 0, winSize.width, winSize.height + 10);
-    return true;
-  },
-
   ctor: function() {
     this._super();
+
+    var winSize = cc.director.getWinSize();
+    this.screenRect = cc.rect(0, 0, winSize.width, winSize.height + 10);
 
     var leftController = Controller.create('left');
     leftController.gameLayer = this;
@@ -57,11 +53,12 @@ var GameLayer = cc.Layer.extend({
     this.puck = puck;
   },
 
-  update: function() {
+  update: function(dt) {
+    this._super(dt);
     if (this.playing) {
-      this.puck.update(1.2);
-      this.paddles.right.update(1.2);
-      this.paddles.left.update(1.2);
+      this.puck.scheduleUpdate();
+      this.paddles.right.scheduleUpdate();
+      this.paddles.left.scheduleUpdate();
     }
   },
 
