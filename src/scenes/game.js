@@ -20,17 +20,26 @@ var GameLayer = cc.Layer.extend({
 
   ctor: function() {
     this._super();
-    this.createPuck();
 
-    var leftPaddle = Paddle.create(null, 'left');
+    var leftController = Controller.create('left');
+    leftController.gameLayer = this;
+    this.addChild(leftController);
+
+    var leftPaddle = Paddle.create(leftController, 'left');
     leftPaddle.gamelayer = this;
     this.addChild(leftPaddle);
     this.paddles.left = leftPaddle;
 
-    var rightPaddle = Paddle.create(null, 'right');
+    var rightController = Controller.create('right');
+    rightController.gameLayer = this;
+    this.addChild(rightController);
+
+    var rightPaddle = Paddle.create(rightController, 'right');
     rightPaddle.gameLayer = this;
     this.addChild(rightPaddle);
     this.paddles.right = rightPaddle;
+
+    this.createPuck();
 
     this.scheduleUpdate();
     return true;
@@ -51,6 +60,8 @@ var GameLayer = cc.Layer.extend({
   update: function() {
     if (this.playing) {
       this.puck.update(1.2);
+      this.paddles.right.update(1.2);
+      this.paddles.left.update(1.2);
     }
   },
 

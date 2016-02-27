@@ -5,20 +5,24 @@ var HomeLayer = cc.Layer.extend({
 
     var size = cc.winSize;
 
-    var startGameNormal = cc.Sprite.create(res.game_menu_png, cc.rect(0, 0, 400, 100));
-    var startGameSelected = cc.Sprite.create(res.game_menu_png, cc.rect(0, 400, 400, 100));
-    var startGameDisabled = cc.Sprite.create(res.game_menu_png, cc.rect(0, 800, 400, 100));
+    // Add the "new game" button
     var newGameButton = cc.MenuItemSprite.create(
-      startGameNormal,
-      startGameSelected,
-      startGameDisabled,
-      function() {
-        this.onNewGame();
-      }.bind(this)
+      sprites.startGame.normal,
+      sprites.startGame.selected,
+      sprites.startGame.disabled,
+      this.onNewGameSelect
     );
 
-    var menu = cc.Menu.create(newGameButton);
-    menu.alignItemsVerticallyWithPadding(10);
+    // Add the options button
+    var optionsButton = cc.MenuItemSprite.create(
+      sprites.options.normal,
+      sprites.options.selected,
+      sprites.options.disabled,
+      this.onOptionsSelect
+    );
+
+    var menu = cc.Menu.create(newGameButton, optionsButton);
+    menu.alignItemsHorizontallyWithPadding(10);
     this.addChild(menu);
     menu.setPosition(size.width / 2, size.height / 2 - 80);
     this.schedule(this.update, 0.1);
@@ -32,7 +36,7 @@ var HomeLayer = cc.Layer.extend({
     return true;
   },
 
-  onNewGame: function() {
+  onNewGameSelect: function() {
     var gameScene = new GameScene();
     if (gameScene.init()) {
       cc.director.pushScene(
@@ -41,6 +45,10 @@ var HomeLayer = cc.Layer.extend({
     } else {
       throw Error('Could not initialize game scene');
     }
+  },
+
+  onOptionsSelect: function() {
+    alert('you pressed the thing');
   }
 });
 

@@ -15,6 +15,7 @@
         "src/resource.js",
         "src/components/puck.js",
         "src/components/paddle.js",
+        "src/components/controller.js",
         "src/scenes/home.js",
         "src/scenes/game.js"
     ]
