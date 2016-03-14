@@ -13,6 +13,7 @@
 
     "jsList" : [
         "src/resource.js",
+        "src/components/exit-button.js",
         "src/components/puck.js",
         "src/components/paddle.js",
         "src/components/controller.js",

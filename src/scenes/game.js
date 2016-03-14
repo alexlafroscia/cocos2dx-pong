@@ -1,5 +1,5 @@
 var SCORE_TEXT_SIZE = 40;
-var SCORE_TEXT_CENTER_OFFSET = 30;
+var SCORE_TEXT_CENTER_OFFSET = 100;
 
 var GameLayer = cc.Layer.extend({
   sprite: null,
@@ -26,6 +26,10 @@ var GameLayer = cc.Layer.extend({
     leftScoreLabel.x = winSize.width / 2 - SCORE_TEXT_CENTER_OFFSET;
     leftScoreLabel.y = winSize.height - (SCORE_TEXT_SIZE * 1.5);
     this.addChild(leftScoreLabel);
+
+    var exitButton = ExitButton.create(winSize.width / 2, winSize.height - (SCORE_TEXT_SIZE * 1.5));
+    exitButton.onClickHandler = this.onExit.bind(this);
+    this.addChild(exitButton, 3);
 
     var rightScoreLabel = new cc.LabelTTF('0', 'Arial', SCORE_TEXT_SIZE);
     rightScoreLabel.x = winSize.width / 2 + SCORE_TEXT_CENTER_OFFSET;
@@ -96,6 +100,10 @@ var GameLayer = cc.Layer.extend({
   resetPuck: function() {
     this.puck.destroy();
     this.createPuck();
+  },
+
+  onExit: function onExit() {
+    cc.director.popToRootScene();
   }
 
 });

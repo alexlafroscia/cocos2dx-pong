@@ -1,5 +1,6 @@
 var HomeLayer = cc.Layer.extend({
   sprite: null,
+
   ctor: function() {
     this._super();
 
@@ -7,17 +8,17 @@ var HomeLayer = cc.Layer.extend({
 
     // Add the "new game" button
     var newGameButton = cc.MenuItemSprite.create(
-      sprites.startGame.normal,
-      sprites.startGame.selected,
-      sprites.startGame.disabled,
+      sprites.startGame.normal(),
+      sprites.startGame.selected(),
+      sprites.startGame.disabled(),
       this.onNewGameSelect
     );
 
     // Add the options button
     var optionsButton = cc.MenuItemSprite.create(
-      sprites.options.normal,
-      sprites.options.selected,
-      sprites.options.disabled,
+      sprites.options.normal(),
+      sprites.options.selected(),
+      sprites.options.disabled(),
       this.onOptionsSelect
     );
 
