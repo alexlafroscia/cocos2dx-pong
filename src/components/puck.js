@@ -17,6 +17,8 @@ var Puck = cc.Sprite.extend({
   onCrossLeftBoundary: undefined,
   onCrossRightBoundary: undefined,
 
+  isColliding: false,
+
   gameLayer: null,
 
   ctor: function() {
@@ -66,10 +68,12 @@ var Puck = cc.Sprite.extend({
   },
 
   bounceHorizontal: function() {
+    this.isColliding = true;
     this.xVelocity = this.xVelocity * -1;
   },
 
   bounceVertical: function() {
+    this.isColliding = true;
     this.yVelocity = this.yVelocity * -1;
   },
 
@@ -85,7 +89,9 @@ var Puck = cc.Sprite.extend({
     } else if (this.isOutOfBoundsRight()) {
       this.onCrossRightBoundary();
     } else if (this.isCollidingRight() || this.isCollidingLeft()) {
-      this.bounceHorizontal();
+      this.isColliding || this.bounceHorizontal();
+    } else {
+      this.isColliding = false;
     }
 
     this.setPosition(p.x - this.xVelocity * dt, p.y - this.yVelocity * dt);
