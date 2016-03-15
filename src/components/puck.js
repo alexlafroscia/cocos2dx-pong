@@ -70,11 +70,13 @@ var Puck = cc.Sprite.extend({
   bounceHorizontal: function() {
     this.isColliding = true;
     this.xVelocity = this.xVelocity * -1;
+    this.playCollisionSound();
   },
 
   bounceVertical: function() {
     this.isColliding = true;
     this.yVelocity = this.yVelocity * -1;
+    this.playCollisionSound();
   },
 
   update: function(dt) {
@@ -95,6 +97,12 @@ var Puck = cc.Sprite.extend({
     }
 
     this.setPosition(p.x - this.xVelocity * dt, p.y - this.yVelocity * dt);
+  },
+
+  playCollisionSound: function() {
+    if (isSoundEnabled()) {
+      cc.audioEngine.playEffect(res.boop_wav, false);
+    }
   },
 
   destroy: function() {

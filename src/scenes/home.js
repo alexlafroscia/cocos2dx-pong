@@ -49,7 +49,14 @@ var HomeLayer = cc.Layer.extend({
   },
 
   onOptionsSelect: function() {
-    alert('you pressed the thing');
+    var optionsScene = new OptionsScene();
+    if (optionsScene.init()) {
+      cc.director.pushScene(
+        cc.TransitionFade.create(0.5, optionsScene)
+      );
+    } else {
+      throw Error('Could not initialize options scene');
+    }
   }
 });
 

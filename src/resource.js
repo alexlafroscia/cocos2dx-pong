@@ -2,6 +2,8 @@ var MENU_BUTTON_HEIGHT = 63;
 var MENU_BUTTON_WIDTH = 250;
 
 var res = {
+  boop_wav: "res/boop.wav",
+  switch_png: "res/switch.png",
   exit_button_png: "res/exit-button.png",
   game_menu_png: "res/game-menu.png",
   puck_png: "res/puck.png",
