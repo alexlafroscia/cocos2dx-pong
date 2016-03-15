@@ -28,6 +28,11 @@ var HomeLayer = cc.Layer.extend({
     menu.setPosition(size.width / 2, size.height / 2 - 80);
     this.schedule(this.update, 0.1);
 
+    var titleLabel = new cc.LabelTTF('Pong', 'Arial', 100);
+    titleLabel.x = size.width / 2;
+    titleLabel.y = size.height / 2 + 90;
+    this.addChild(titleLabel);
+
     // Author name label
     var authorLabel = new cc.LabelTTF('By Alex LaFroscia', 'Arial', 38);
     authorLabel.x = size.width / 2;

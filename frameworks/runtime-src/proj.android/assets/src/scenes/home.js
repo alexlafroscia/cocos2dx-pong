@@ -1,5 +1,6 @@
 var HomeLayer = cc.Layer.extend({
   sprite: null,
+
   ctor: function() {
     this._super();
 
@@ -7,17 +8,17 @@ var HomeLayer = cc.Layer.extend({
 
     // Add the "new game" button
     var newGameButton = cc.MenuItemSprite.create(
-      sprites.startGame.normal,
-      sprites.startGame.selected,
-      sprites.startGame.disabled,
+      sprites.startGame.normal(),
+      sprites.startGame.selected(),
+      sprites.startGame.disabled(),
       this.onNewGameSelect
     );
 
     // Add the options button
     var optionsButton = cc.MenuItemSprite.create(
-      sprites.options.normal,
-      sprites.options.selected,
-      sprites.options.disabled,
+      sprites.options.normal(),
+      sprites.options.selected(),
+      sprites.options.disabled(),
       this.onOptionsSelect
     );
 
@@ -26,6 +27,11 @@ var HomeLayer = cc.Layer.extend({
     this.addChild(menu);
     menu.setPosition(size.width / 2, size.height / 2 - 80);
     this.schedule(this.update, 0.1);
+
+    var titleLabel = new cc.LabelTTF('Pong', 'Arial', 100);
+    titleLabel.x = size.width / 2;
+    titleLabel.y = size.height / 2 + 90;
+    this.addChild(titleLabel);
 
     // Author name label
     var authorLabel = new cc.LabelTTF('By Alex LaFroscia', 'Arial', 38);
@@ -48,7 +54,14 @@ var HomeLayer = cc.Layer.extend({
   },
 
   onOptionsSelect: function() {
-    alert('you pressed the thing');
+    var optionsScene = new OptionsScene();
+    if (optionsScene.init()) {
+      cc.director.pushScene(
+        cc.TransitionFade.create(0.5, optionsScene)
+      );
+    } else {
+      throw Error('Could not initialize options scene');
+    }
   }
 });
 

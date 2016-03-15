@@ -104,6 +104,7 @@ var GameLayer = cc.Layer.extend({
 
   onExit: function onExit() {
     cc.director.popToRootScene();
+    return true;
   }
 
 });

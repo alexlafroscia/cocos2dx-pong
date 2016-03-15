@@ -29,16 +29,11 @@ var Controller = cc.Sprite.extend({
   },
 
   getCurrentRectangle: function() {
-    return cc.rect(
-      this.getPosition().x - (this.getContentSize().width / 2),
-      this.getPosition().y - (this.getContentSize().height / 2),
-      this.getContentSize().width,
-      this.getContentSize().height
-    );
+    return convertBoxToGL(this.getBoundingBox());
   },
 
   handleTouch: function(touch, event) {
-    var touchLocation = touch.getLocationInView();
+    var touchLocation = cc.director.convertToGL(touch.getLocation());
     if (this.touchTopHalf(touchLocation)) {
       this.upEventCallback();
     } else if (this.touchBottomHalf(touchLocation)) {
@@ -51,7 +46,8 @@ var Controller = cc.Sprite.extend({
 
   touchTopHalf: function(loc) {
     var rect = this.getCurrentRectangle();
-    rect.y = rect.y + rect.height / 2;
+    rect.height = rect.height / 2;
+    rect.y = rect.y + rect.height;
     return cc.rectContainsPoint(rect, loc);
   },
 

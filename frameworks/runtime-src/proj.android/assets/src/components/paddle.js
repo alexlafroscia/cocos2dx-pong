@@ -1,4 +1,4 @@
-var ACTIVE_SPEED = 700;
+var ACTIVE_SPEED = 1000;
 
 var Paddle = cc.Sprite.extend({
   active: true,
